@@ -403,8 +403,9 @@
     <div class="add-all-section" id="addAllSection">
       <button class="btn btn-google" onclick="addAllToCalendar()">
         <img src="https://www.gstatic.com/images/branding/product/1x/calendar_2020q4_48dp.png" alt="Google Calendar">
-        הוסף הכל ל-Google Calendar
+        הורד קובץ לכל האירועים (ICS)
       </button>
+      <p class="info-text" style="margin-top:0.6rem; text-align:center;">הורד את הקובץ ואז <a href="https://calendar.google.com/calendar/r/settings/export" target="_blank">ייבא ל-Google Calendar</a></p>
     </div>
   </div>
 
@@ -606,14 +607,56 @@
 
   function addAllToCalendar() {
     const name = document.getElementById('friendName').value.trim();
-    // Open each in a new tab with slight delay to avoid popup blocking
-    convertedDates.forEach((d, i) => {
-      setTimeout(() => {
-        const url = buildCalendarUrl(d, name);
-        window.open(url, '_blank');
-      }, i * 600);
-    });
+    const icsContent = generateICS(name, convertedDates);
+    const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `birthday-${name}.ics`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
     showToast();
+  }
+
+  function generateICS(name, dates) {
+    const now = new Date();
+    const stamp = now.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+    let ics = [
+      'BEGIN:VCALENDAR',
+      'VERSION:2.0',
+      'PRODID:-//Hebrew Birthday Reminder//HE',
+      'CALSCALE:GREGORIAN',
+      'METHOD:PUBLISH',
+    ];
+    dates.forEach((d, i) => {
+      const dateStr = `${d.gy}${String(d.gm).padStart(2,'0')}${String(d.gd).padStart(2,'0')}`;
+      const nextDay = new Date(d.gy, d.gm - 1, d.gd + 1);
+      const endStr = `${nextDay.getFullYear()}${String(nextDay.getMonth()+1).padStart(2,'0')}${String(nextDay.getDate()).padStart(2,'0')}`;
+      ics.push(
+        'BEGIN:VEVENT',
+        `UID:hebrew-bday-${name}-${d.hebrewYear}-${i}@hebrew-birthday`,
+        `DTSTAMP:${stamp}`,
+        `DTSTART;VALUE=DATE:${dateStr}`,
+        `DTEND;VALUE=DATE:${endStr}`,
+        `SUMMARY:🎂 יום הולדת ${name} (${d.hebrewDate})`,
+        `DESCRIPTION:יום הולדת עברי: ${d.hebrewDate}\\nתאריך לועזי: ${d.displayDate}`,
+        'BEGIN:VALARM',
+        'TRIGGER:-P1D',
+        'ACTION:DISPLAY',
+        `DESCRIPTION:מחר יום הולדת של ${name}!`,
+        'END:VALARM',
+        'BEGIN:VALARM',
+        'TRIGGER:PT9H',
+        'ACTION:DISPLAY',
+        `DESCRIPTION:היום יום הולדת של ${name}!`,
+        'END:VALARM',
+        'END:VEVENT'
+      );
+    });
+    ics.push('END:VCALENDAR');
+    return ics.join('\r\n');
   }
 
   function showError(msg) {
