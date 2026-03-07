@@ -397,23 +397,15 @@
       </div>
     </div>
 
-    <div class="checkbox-group">
-      <input type="checkbox" id="recurring" checked>
-      <label for="recurring">הוסף תזכורת לכל שנה (ממיר את התאריך העברי ללועזי)</label>
-    </div>
-
-    <div class="years-config show" id="yearsConfig">
-      <div class="form-group" style="margin-bottom:0">
-        <label for="numYears">כמה שנים קדימה?</label>
-        <select id="numYears">
-          <option value="3">3 שנים</option>
-          <option value="5" selected>5 שנים</option>
-          <option value="10">10 שנים</option>
-          <option value="15">15 שנים</option>
-          <option value="20">20 שנים</option>
-        </select>
-        <p class="info-text">ייווצר אירוע נפרד לכל שנה עם התאריך הלועזי המדויק</p>
-      </div>
+    <div class="form-group">
+      <label for="numYears">כמה שנים קדימה?</label>
+      <select id="numYears">
+        <option value="3">3 שנים</option>
+        <option value="5">5 שנים</option>
+        <option value="10">10 שנים</option>
+        <option value="15">15 שנים</option>
+        <option value="20" selected>20 שנים</option>
+      </select>
     </div>
 
     <div class="error-msg" id="errorMsg"></div>
@@ -421,6 +413,7 @@
     <button class="btn btn-primary" id="convertBtn" onclick="convert()">
       🔄 המר והצג תאריכים
     </button>
+    <p class="info-text" style="margin-top:0.6rem; text-align:center;">אחרי ההמרה, לחצו "הוסף" על כל תאריך כדי להוסיף אותו ליומן גוגל</p>
   </div>
 
   <div class="loader" id="loader">
@@ -476,8 +469,6 @@
 
   const daySelect = document.getElementById('hebrewDay');
   const monthSelect = document.getElementById('hebrewMonth');
-  const recurringCheckbox = document.getElementById('recurring');
-  const yearsConfig = document.getElementById('yearsConfig');
 
   for (let i = 1; i <= 30; i++) {
     const opt = document.createElement('option');
@@ -491,10 +482,6 @@
     opt.value = m.name;
     opt.textContent = m.he;
     monthSelect.appendChild(opt);
-  });
-
-  recurringCheckbox.addEventListener('change', () => {
-    yearsConfig.classList.toggle('show', recurringCheckbox.checked);
   });
 
   function gematriya(num) {
@@ -522,7 +509,6 @@
     const name = document.getElementById('friendName').value.trim();
     const day = daySelect.value;
     const month = monthSelect.value;
-    const isRecurring = recurringCheckbox.checked;
     const numYears = parseInt(document.getElementById('numYears').value);
 
     if (!name) {
@@ -542,7 +528,7 @@
     convertedDates = [];
 
     const currentHY = getCurrentHebrewYear();
-    const yearsToFetch = isRecurring ? numYears : 1;
+    const yearsToFetch = numYears;
 
     try {
       const promises = [];
