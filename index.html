@@ -425,16 +425,19 @@
     <h2>✨ התאריכים הלועזיים</h2>
     <div id="resultsList"></div>
     <div class="add-all-section" id="addAllSection">
-      <button class="btn btn-google" onclick="addAllToCalendar()">
-        💾 הורד קובץ לכל האירועים (ICS)
-      </button>
-      <div class="info-text" style="margin-top:0.8rem; background:var(--primary-light); padding:0.8rem 1rem; border-radius:10px;">
-        <p style="font-weight:500; color:var(--text); margin-bottom:0.3rem;">📋 איך מייבאים את הקובץ?</p>
-        <p>1. לחצו על הכפתור למעלה - יירד קובץ ICS</p>
-        <p>2. היכנסו ל-<a href="https://calendar.google.com/calendar/r/settings/export" target="_blank">Google Calendar - ייבוא</a></p>
-        <p>3. לחצו "בחר קובץ מהמחשב" ובחרו את הקובץ שירד</p>
-        <p>4. לחצו "ייבוא" - כל האירועים יתווספו ליומן!</p>
-        <p style="margin-top:0.4rem;">⚠️ בטלפונים ייתכן שההורדה לא תעבוד - השתמשו בכפתור "הוסף" על כל תאריך בנפרד</p>
+      <p style="font-weight:600; color:var(--text); margin-bottom:0.6rem; font-size:0.95rem;">💡 רוצים להוסיף את הכל בבת אחת? (מחשב בלבד)</p>
+      <div class="info-text" style="background:var(--primary-light); padding:1rem; border-radius:12px; font-size:0.88rem; line-height:1.7;">
+        <p><strong>שלב 1:</strong> לחצו על הכפתור הזה להורדת הקובץ 👇</p>
+        <button class="btn btn-primary" onclick="addAllToCalendar()" style="margin:0.6rem 0; font-size:0.95rem;">
+          📥 הורד את כל התאריכים כקובץ
+        </button>
+        <p><strong>שלב 2:</strong> לחצו על הלינק הזה לפתיחת Google Calendar 👇</p>
+        <a href="https://calendar.google.com/calendar/r/settings/export" target="_blank" class="btn btn-google" style="margin:0.6rem 0; font-size:0.9rem; text-decoration:none;">
+          📅 פתח את Google Calendar (דף ייבוא)
+        </a>
+        <p><strong>שלב 3:</strong> בדף שנפתח, לחצו "בחר קובץ מהמחשב" ובחרו את הקובץ שירד</p>
+        <p><strong>שלב 4:</strong> לחצו "ייבוא" - סיימתם! 🎉</p>
+        <p style="margin-top:0.5rem; color:var(--text-light);">⚠️ הייבוא עובד רק מהמחשב. בטלפון השתמשו בכפתור "הוסף" על כל תאריך בנפרד ☝️</p>
       </div>
     </div>
   </div>
